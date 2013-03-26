@@ -1,0 +1,4 @@
+sskel
+=====
+
+sidusnare's skeleton
