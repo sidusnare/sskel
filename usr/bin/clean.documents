@@ -1,0 +1,12 @@
+#!/bin/bash
+
+DOCS=`backup.git.paths | grep -i document`
+
+cd "$HOME"/"$DOCS"
+find -type f -name '*.ods' -exec clean.open_doc '{}' \;
+find -type f -name '*.odt' -exec clean.open_doc '{}' \;
+find -type f -name '*.odp' -exec clean.open_doc '{}' \;
+find -type f -name '*.odb' -exec clean.open_doc '{}' \;
+find -type f -name '*.odg' -exec clean.open_doc '{}' \;
+find -type f -name '*.odf' -exec clean.open_doc '{}' \;
+

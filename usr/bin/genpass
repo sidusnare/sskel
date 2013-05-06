@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Short and simple one liner to output a reandom password
+# Fred Dinkler IV 
+
+tr -dc A-Za-z0-9 < /dev/urandom | head -c12
+echo

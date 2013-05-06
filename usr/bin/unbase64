@@ -1,0 +1,18 @@
+#!/usr/bin/perl -w
+use strict;
+use MIME::Base64;
+
+my @all=<>;
+if (!@all){
+        die "No input\n";
+}
+my $string;
+foreach(@all){
+	$string.=$_;
+}
+chomp($string);
+$string=~s/\s+//g;
+
+	
+$string = MIME::Base64::decode_base64($string);
+print "$string";

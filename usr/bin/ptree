@@ -1,0 +1,8 @@
+#!/bin/bash
+
+ptree=`which -a ptree | grep -v $HOME` >> /dev/null 2>> /dev/null
+pstree=`which pstree | grep -v $HOME` >> /dev/null 2>> /dev/null
+
+[ -n "$ptree" ] && exec ptree $@
+[ -n "$pstree" ] && exec pstree $@
+ps auxf 2>> /dev/null || ps -Al 

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export -p | grep -v '_='  > "$HOME"/usr/local/var/env
+echo $DISPLAY > "$HOME"/usr/local/var/disp
+ssh-scrape

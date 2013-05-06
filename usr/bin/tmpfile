@@ -1,0 +1,45 @@
+#!/bin/bash
+
+if [ -z "$TMP" ]; then
+	echo "Please set \$TMP ."
+	exit 0
+fi
+if [ -z "$1" ];then
+
+	file="$TMP"/"$RANDOM"
+	while [ -e "$file" ]; do 
+		newfile="$TMP"/"$RANDOM""$RANDOM"
+		file=$newfile
+	#	echo "tmp file exists, skipping to next" 1>&2
+	done
+	touch $file
+	if [ -z "$newfile" ]; then
+		echo $file
+	#	echo '.' 1>&2
+	else
+		echo $newfile
+	#	echo '#' 1>&2
+	fi
+else
+	if [ -f "$TMP"/"$1" ]; then
+		echo "Name colision with file $1"
+	fi
+	if [ ! -d "$TMP"/"$1" ]; then
+		mkdir -p "$TMP"/"$1"
+		chmod 0700 "$TMP"/"$1"
+	fi
+	file="$TMP"/"$1"/"$RANDOM"
+	while [ -e "$file" ]; do 
+		newfile="$TMP"/"$1"/"$RANDOM""$RANDOM"
+		file=$newfile
+	#	echo "tmp file exists, skipping to next" 1>&2
+	done
+	touch $file
+	if [ -z "$newfile" ]; then
+		echo $file
+	#	echo '.' 1>&2
+	else
+		echo $newfile
+	#	echo '#' 1>&2
+	fi
+fi

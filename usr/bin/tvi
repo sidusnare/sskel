@@ -1,0 +1,10 @@
+#!/bin/bash
+
+file="$TMP"/"$RANDOM"
+while [ -e "$file" ]; do 
+	file="$TMP"/"$RANDOM"
+	echo $file
+done
+echo $file
+
+exec vi $file

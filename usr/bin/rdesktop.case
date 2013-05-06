@@ -1,0 +1,43 @@
+#!/bin/bash
+ses=$RANDOM$RANDOM$RANDOM
+date
+grep "$serv\ "  ~/usr/var/log/jlog.`hostname` | tail -n 5
+echo `date` \| $1 \| $ses \| c \| rdp >> ~/usr/var/log/jlog.`hostname`
+uname=`uname`
+
+res=`res`
+if [ -z "$res" ]; then
+	res="1024x768"
+else
+	#different window sizes for different enviroments
+	ores=$res
+	if pidof wmaker;then
+		xdiff=0
+		ydiff=40
+	fi
+	if [ "$uname" = "Darwin" ];then
+		xdiff=10
+		ydiff=10
+	fi
+		
+	x=`echo $res | awk -F x '{print($1)}'`
+	y=`echo $res | awk -F x '{print($2)}'`
+	ny=`echo "$y - $ydiff" | bc`
+	nx=`echo "$x - $xdiff" | bc`
+	res="$nx"x"$ny"
+	echo "res was $ores, now $res"
+
+fi
+#If we are on MacOS, let it draw the window dressing, we dont have alt + click
+if [ "$uname" = "Darwin" ]; then
+	cmd="rdesktop -z -a 24 -P -K -B -g $res -r disk:tmp="$HOME"/usr/tmp/  -u $USER $serv"
+else
+	cmd="rdesktop -z -a 24 -P -D -K -B -g $res -r disk:tmp="$HOME"/usr/tmp/  -u $USER $serv"
+fi
+echo $cmd
+if eval $cmd;then
+	ret=d
+else
+	ret=f
+fi
+

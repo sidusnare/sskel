@@ -1,0 +1,15 @@
+#!/bin/bash
+OIFS=$IFS
+IFS=$(echo -en "\n\b")
+
+pth=$1
+shift
+args=$@
+for x in `find -L $pth -xdev -type f $args -exec grep -l '^======' '{}' \; `;do 
+	for y in `grep -l  '^>>>>>>>' "$x"`;do 
+		grep -l '^<<<<<<<' "$y";
+	done
+done
+
+IFS=$OIFS
+

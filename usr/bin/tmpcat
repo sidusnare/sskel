@@ -1,0 +1,6 @@
+#!/bin/bash
+
+file=`tmpfile $1`
+echo $file
+shift
+exec cat $@ > $file

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+scan=`scan.get.scanner`
+echo reading from $scan
+for x in {1..1000}; do 
+	echo $x; scanimage -d "$scan" --format=pnm --source Flatbed --resolution 300 --wait-for-button  --mode Gray > "$1".$x.pnm
+done

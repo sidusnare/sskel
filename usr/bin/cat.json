@@ -1,0 +1,20 @@
+#!/usr/bin/python
+
+#Read a JSON file and write it to stdout
+#Really jsut a proof of concept
+#Fred Dinkler IV
+
+import json
+import sys
+
+fn=sys.argv[1]
+try:
+	jf = open(fn)
+except:
+	sys.exit("Unable to open " + fn)
+try:
+	print json.dumps(json.loads(jf.read()), sort_keys=True, indent=4)
+except:
+	sys.exit("Unable to read valid json in "  + fn)
+
+

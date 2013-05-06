@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then echo Usage: $0 username ;exit 1 ;fi
+
+(echo -n "$1 ";genpass) | gawk '{print($2 " usermod -p :PAD");
+system("mkshadowpass " $2)
+print(":PAD "$1)}
+
+'| tr -d '\n' | sed -e "s/:PAD/\'/g"
+echo

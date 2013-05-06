@@ -1,0 +1,10 @@
+#!/bin/bash
+#Cleans an XML file
+#Fred Dinkler IV
+
+
+file=`tmpfile clean.xml`
+echo working on $1 backing up in $file
+cat "$1" > "$file" || exit
+echo "$1" > "$file".log || exit
+cat "$file" | egrep -v '^<<<<<<<|^=======|^>>>>>>>' | xmllint --recover --format -  > $file.clean 2>> "$file".log && (cat $file.clean > "$1")

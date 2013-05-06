@@ -1,0 +1,36 @@
+#!/usr/bin/python
+#Read JSON data and write it well formatted to a file
+#Fred Dinkler IV
+
+import json
+import sys
+
+fn=sys.argv[1]
+try:
+	jf = open(fn)
+except:
+	sys.exit("Unable to open " + fn)
+	jf.close()
+try:
+	jsondat=json.dumps(json.loads(jf.read()), sort_keys=True, indent=4)
+except:
+	sys.exit("Unable to read valid json in "  + fn)
+	jf.close()
+
+jf.close()
+
+try:
+	jw = open(fn,"w")
+except:
+	sys.exit("Unable to open for writing " + fn)
+	jw.close()
+
+try:
+	jw.writelines(jsondat + "\n" )
+except:
+	sys.exit("Unable to write to " + fn)
+	jw.close()
+
+jw.close()
+
+

@@ -1,0 +1,19 @@
+#!/bin/bash -e
+
+#Expand open document files to a folder
+#Fred Dinkler IV
+
+if [ -z "$@" ]; then
+	echo "Missing file name"
+else
+	echo -e "\n\n\t\tWorking on $x\n"
+	echo -e "\n\tcleaning up old files"
+	rm -rf "$@".expanded 2>> /dev/null
+	echo -e "\n\tCreating .expanded"
+	mkdir "$@".expanded || exit
+	echo -e "\n\textracting ODF file"
+	unzip "$@" -d "$@".expanded/ 1>> /dev/null 2>> /dev/null || exit
+	echo -e "\n\tCleaning XML"
+	find "$@".expanded -name '*.xml' -size +0 -exec clean.xml '{}' \;
+fi
+

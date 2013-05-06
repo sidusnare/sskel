@@ -1,0 +1,3 @@
+#!/bin/bash
+
+find $@ -type f -and -name '*.odt' -or -name '*.ods -or -name '*.odp -or -name '*.odb -or -name '*.odg -or -name '*.odf'

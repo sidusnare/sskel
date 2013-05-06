@@ -1,0 +1,5 @@
+#!/bin/bash
+
+for x in `screen -r | grep Detached | awk '{print($1)}'`;do
+	screen -r $x
+done

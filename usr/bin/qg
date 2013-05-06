@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ -z "$1" ];then
+	comment="quick commit from `hostname `"
+else
+	comment="$@"
+fi
+git-up || git pull --rebase
+git status
+echo -n Go?
+if yesno; then
+	echo
+	git-up ||  git pull --rebase || git pull || exit
+	git add -A
+	git commit -m "$comment"
+	git push
+else
+	echo
+	echo k thnx bye
+fi
+

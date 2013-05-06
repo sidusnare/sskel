@@ -1,0 +1,12 @@
+#!/bin/bash
+
+while true;do
+	sleep 1s
+	if [ -e "$HOME"/usr/tmp/lock ]; then
+		rundll32.exe user32.dll,LockWorkStation
+		date -R
+		rm "$HOME"/usr/tmp/lock
+		sleep 1s
+	fi
+done
+

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+count=`ssh-add -L | grep -v '^The agent has no identities.$' | wc -l`
+if [ "$count" -lt 1 ];then
+	echo -n SSH agent has no keys, waiting ...
+fi
+while [ "$count" -lt 1 ];do
+	source "$HOME"/usr/local/var/ssh
+	export SSH_AGENT_PID
+	export SSH_AUTH_SOCK
+	sleep 1s
+	count=`ssh-add -L | grep -v '^The agent has no identities.$' | wc -l`
+	echo $count
+	echo -n .
+done
+echo

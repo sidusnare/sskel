@@ -1,0 +1,63 @@
+#!/bin/bash
+scan=`scan.get.scanner`
+gocr=`which gocr`
+tesseract=`which tesseract`
+ocrad=`which ocrad`
+while [ -z "$scan" ];do
+	echo -e "\tWaiting for scanner..."
+	scan=`scan.get.scanner`
+done
+echo reading from $scan
+echo tesseract $tesseract
+echo gocr $gocr
+echo ocrad $ocrad
+echo -n "Press enter to continue:"
+read go
+error="0"
+echo reading from $scan
+for x in {1..1000}; do 
+	echo -e -n "name:"
+	read name
+	echo $name
+	name="$name".`date  +%s`
+	check=pass
+	if [ -e "$name".jpg ]; then
+		check=fail
+	fi
+	if [ -z "$name" ] ;then
+		check=fail
+	fi
+	while [ "$check" = "fail" ];do
+		echo -n "Name already exists, try annother:"
+		read name
+		check=pass
+		if [ -e "$name".jpg ]; then
+			check=fail
+		fi
+		if [ -z "$name" ] ;then
+			check=fail
+		fi
+	done
+	echo check = $check
+	scanimage -v -d "$scan" --format=pnm --source Flatbed --resolution 600 --mode Color > "$name".color.pnm || error="1"
+	echo -e "\n\tConverting image formats for OCR"
+	convert -resize 2550 -colorspace Gray "$name".color.pnm "$name".tiff
+	convert "$name".tiff "$name".tif
+	convert "$name".tiff "$name".pnm
+	echo -e "\n\tTesseract"
+	[ -n "$tesseract" ] && tesseract "$name".tif "$name".tesseract
+	echo -e "\n\tgocr"
+	[ -n "$gocr" ] && gocr -v -s 0 -l 0 -d -1 -f ISO8859_1 "$name".pnm -o "$name".gocr.txt
+	echo -e "\n\tOCRad"
+	[ -n "$ocrad" ] && ocrad -v  "$name".pnm --charset=iso-8859-15 -o "$name".ocrad.txt
+	echo -e "\n\tCleaning up"
+	convert "$name".color.pnm "$name".color.jpg
+	rm "$name".color.pnm "$name".tiff  "$name".tif "$name".pnm
+	echo Done with $name
+	if [ "$error" = "1" ];then
+		echo Exiting on error
+		exit 1
+	fi
+	echo -e "\n\n\n\n\n\n"
+
+done

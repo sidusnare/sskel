@@ -1,0 +1,26 @@
+#!/bin/bash
+
+#cd "$HOME"/usr/tmp/
+#[ -e hipchat.air ] && rm -fv hipchat.air 
+#wget http://downloads.hipchat.com/hipchat.air
+#mkdir hipchat
+#cd hipchat
+#unzip ../hipchat.air 
+#cd
+#ssh root@localhost mv /opt/AIR-apps/hipchat /opt/AIR-apps/hipchat.`date -I`
+#ssh root@localhost mv "$HOME"/usr/tmp/hipchat /opt/AIR-apps/hipchat
+#ssh root@localhost chown -R 0:100  /opt/AIR-apps/hipchat
+#ssh root@localhost chown -R 0:100  /opt/AIR-apps/hipchat
+#ssh root@localhost chmod -R u=rwX,g=rX,o=rX  /opt/AIR-apps/hipchat
+
+DATE=`date +%s`
+ARCH=`uname -m`
+
+mkdir "$HOME"/usr/tmp/$DATE.hc
+cd "$HOME"/usr/tmp/$DATE.hc
+
+wget http://downloads.hipchat.com/linux/arch/hipchat-"$ARCH".tar.xz
+tar -Jxvf hipchat-"$ARCH".tar.xz
+[ -d "$HOME"/usr/local/HipChat ] && rm -rfv "$HOME"/usr/local/HipChat
+mv -v opt/HipChat "$HOME"/usr/local/
+rm -rf "$HOME"/usr/tmp/$DATE.hc

@@ -1,0 +1,50 @@
+#!/bin/bash
+unset DISPLAY
+source "$HOME"/usr/local/var/env
+OS=`uname`
+echo 1 $DISPLAY
+if [ -z "$DISPLAY" ];then
+	DISPLAY=`cat "$HOME"/usr/local/var/disp`
+	export DISPLAY
+fi
+echo 2 $DISPLAY
+if [ -z "$DISPLAY" ] ; then 
+	DISPLAY=:0
+fi
+echo 3 $DISPLAY
+export DISPLAY=$DISPLAY
+if [ -e "$HOME"/usr/var/dispauth ]; then
+	XAUTHORITY=`cat "$HOME"/usr/var/dispauth`
+	export XAUTHORITY=$XAUTHORITY
+fi
+
+locked=0
+case "$OS" in
+	Darwin)
+		open /System/Library/Frameworks/ScreenSaver.framework/Versions/Current/Resources/ScreenSaverEngine.app
+		;;
+	Linux)
+		#GNOME Command
+		gnome-screensaver-command -l && locked=1
+		#Classic X Command
+		xscreensaver-command -lock && locked=1
+		#Old KDE
+		dcop kdesktop KScreensaverIface lock && locked=1
+		#New KDE
+		qdbus org.freedesktop.ScreenSaver /ScreenSaver Lock && locked=1
+		if [ "$locked" = "0" ];then
+			gnome-screensaver &
+			sleep 2s
+			gnome-screensaver-command -l 2>> /dev/null >> /dev/null && locked=1
+		fi
+		if [ "$locked" = "0" ];then
+			xscreensaver &
+			sleep 2s
+			xscreensaver-command -lock 2>> /dev/null >> /dev/null && locked=1
+		fi
+		;;
+esac
+[ -d "$HOME"/usr/local/var/log ] || mkdir -p "$HOME"/usr/local/var/log
+echo "$(date +%s)|$(date)|llock return code $locked" >> "$HOME"/usr/local/var/log/llock.log
+
+screen -d -m domotion

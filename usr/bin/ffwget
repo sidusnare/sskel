@@ -1,0 +1,4 @@
+#!/bin/bash
+
+wget --user-agent='Mozilla/5.0 (X11; Linux x86_64; rv:10.0.4) Gecko/20100101 Firefox/10.0.4' --load-cookies=$HOME/usr/local/var/cookies.txt $@
+
