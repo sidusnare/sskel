@@ -1,0 +1,9 @@
+/local/
+.rvm
+tmp/
+*.pyc
+**/*.pyc
+**/**/*.pyc
+*.swp
+**/*.swp
+**/**/*.swp
