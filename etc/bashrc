@@ -1,10 +1,21 @@
 #dircolors -b ${HOME}/usr/etc/DIR_COLORS
+OS=`uname`
+MACHINE=`uname -m`
+OM=$OS.$MACHINE
+
 PATH="${HOME}"/usr/local/bin:"${HOME}"/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH
-PATH="${HOME}"/usr/bin.`uname`.`uname -m`:$PATH
+if [ -e "${HOME}/usr/bin.${OM}" ]; then
+	PATH="${HOME}/usr/bin.${OM}":$PATH
+fi
 export TMPDIR="${HOME}"/usr/tmp/
 export TMP="${HOME}"/usr/tmp/
 export HISTCONTROL=ignoredups:erasedups
-export LD_LIBRARY_PATH="${HOME}"/usr/local/lib.`uname`.`uname -m`/:"${HOME}"/usr/lib.`uname`.`uname -m`/
+if -e [ "${HOME}/usr/local/lib.$OM" ]; then
+	export LD_LIBRARY_PATH="${HOME}/usr/local/lib.${OM}/":${LD_LIBRARY_PATH}
+fi
+if -e [ "${HOME}/usr/lib.$OM" ]; then
+	export LD_LIBRARY_PATH="${HOME}/usr/lib.${OM}/":${LD_LIBRARY_PATH}
+fi
 export C_INCLUDE_PATH="${HOME}/usr/local/include"
 export LDFLAGS="-L${HOME}/usr/local/lib"
 export CFLAGS="-I${HOME}/usr/local/include"
@@ -16,15 +27,16 @@ umask 0007
 have()
 {
     unset -v have
-    type $1 &>/dev/null &&
-    have="yes"
+    type $1 &>/dev/null && have="yes" || have="no"
 }
 
 source find.ssh 2>> /dev/null >> /dev/null
 
 if [ -d "${HOME}"/usr/etc/bash.rc.d ] ; then 
 	for x in  "${HOME}"/usr/etc/bash.rc.d/*.inc;do
-		source $x >> /dev/null 2>> /dev/null
+		if [ -x "$x" ];then
+			source $x >> /dev/null 2>> /dev/null
+		fi
 	done
 fi
 
@@ -50,7 +62,9 @@ if [[ "$-" == *i* ]] ;then
 
 	if [ -d "${HOME}"/usr/etc/bash.int.rc.d ] ; then 
 		for x in  "${HOME}"/usr/etc/bash.int.rc.d/*.inc;do
-			[ -x $x ] && source $x
+			if [ -x "$x" ];then
+				[ -x $x ] && source $x
+			fi
 		done  2>> /dev/null | sed -e 's/  */ /g'
 	fi
 fi
@@ -65,6 +79,7 @@ if [ -e "${HOME}"/.rvm  ]; then
 	[[ -s "${HOME}/.rvm/scripts/rvm" ]] && source "${HOME}/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 	rvm gemset use global 2>> /dev/null >> /dev/null
 fi
+
 #MacOS Python
 if [ -d "/Library/Frameworks/Python.framework/Versions/2.7/bin" ];then
 	PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
@@ -75,14 +90,14 @@ if [ -d "/Library/Frameworks/Python.framework/Versions/3.3/bin" ];then
 	PATH="/Library/Frameworks/Python.framework/Versions/3.3/bin:${PATH}"
 	export PATH
 fi
+
 #Are you crazy? Qucickly!
 if [ -x "${HOME}"/usr/bin/sanity.quick ]; then
 	sanity.quick 2>> /dev/null >> /dev/null
 fi
+
 #Prefer GNU over Darwin on MacOS
 if [ -d /opt/local/libexec/gnubin ]; then
 	PATH=/opt/local/libexec/gnubin/:$PATH
 fi
 
-
-export PATH="$PATH:${HOME}/.rvm/bin" # Add RVM to PATH for scripting

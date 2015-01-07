@@ -1,0 +1,11 @@
+if which acpi >> /dev/null 2>> /dev/null;then
+	AC=`acpi -a 2>> /dev/null | awk -F \: '{print($2)}' | tr -d ' '`
+	BAT=`acpi -b 2>> /dev/null | grep \% | head -n 1 | tr ' ' '\n' | grep \% | head -n 1 | tr -d ,`
+	if [ "$AC" == "on-line" ]; then
+		export BATT=AC-$(acpi -b 2>> /dev/null | head -n 1 | tr ' ' '\n' | sed -e 's/,//g'  | grep \% | head -n 1)
+	else
+		export BATT=$(acpi -b 2>> /dev/null | head -n 1 | tr ' ' '\n' | sed -e 's/,//g'  | grep \% | head -n 1 | tr -d \%)
+	fi
+else
+	export BATT=""
+fi

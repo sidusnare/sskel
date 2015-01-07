@@ -35,13 +35,8 @@ export HISTCONTROL=ignoredups
 export PS1='\[\033[01;32m\]\u@\h\[\033[01;34m\]:\w \$\[\033[00m\]'
 umask 0007
 if [ -d "${HOME}"/usr/local/opt/sun-java ];then
-        export JAVA_HOME="${HOME}"/usr/local/sun-java
-        export JAVAC="${HOME}"/usr/local/sun-java/bin/javac
-        export JDK_HOME="${HOME}"/usr/local/sun-java
+        export JAVA_HOME="${HOME}"/usr/local/opt/sun-java
+        export JAVAC="${HOME}"/usr/local/opt/sun-java/bin/javac
+        export JDK_HOME="${HOME}"/usr/local/opt/sun-java
 fi
-
-IPVIEWER=3.0.0.25
-export IPVIEWER
-IPVIEWER_PATH=${HOME}/usr/local/opt/hpip
-export IPVIEWER_PATH
 
