@@ -1,0 +1,47 @@
+eval `dircolors -b ${HOME}/usr/etc/DIR_COLORS`
+TMP="${HOME}"/usr/tmp
+TEMP=$TMP
+OS=`uname`
+MACHINE=`uname -m`
+OM=$OS.$MACHINE
+case $OS in
+	Darwin)
+		alias ls="ls -G -h"
+		;;
+	Linux)
+		alias ls="ls --color=auto -h"
+		;;
+esac
+alias ssh="ssh -Y "
+export LD_LIBRARY_PATH="${HOME}"/usr/local/lib.$OM:"${HOME}"/usr/lib/.$OM
+export PATH="${HOME}"/usr/local/bin:"${HOME}"/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH
+if [ -e "${HOME}/usr/bin.${OM}" ]; then
+	export PATH="${HOME}"/usr/bin.$OM:$PATH
+fi
+export C_INCLUDE_PATH="${HOME}/usr/local/include"
+export LDFLAGS="-L${HOME}/usr/local/lib"
+export CFLAGS="-I${HOME}/usr/local/include"
+export LANG="en_US.utf8"
+export LC_COLLATE="C"
+export SSH_ASKPASS='ssh-askpass'
+source find.ssh 2>> /dev/null >> /dev/null
+export SSH_AGENT_PID
+export SSH_AUTH_SOCK
+
+[ -f /etc/profile.d/bash-completion ] && source /etc/profile.d/bash-completion
+[ -f "${HOME}"/usr/etc/profile.d/bash-completion ] && source "${HOME}"/usr/etc/profile.d/bash-completion
+
+export HISTCONTROL=ignoredups
+export PS1='\[\033[01;32m\]\u@\h\[\033[01;34m\]:\w \$\[\033[00m\]'
+umask 0007
+if [ -d "${HOME}"/usr/local/opt/sun-java ];then
+        export JAVA_HOME="${HOME}"/usr/local/sun-java
+        export JAVAC="${HOME}"/usr/local/sun-java/bin/javac
+        export JDK_HOME="${HOME}"/usr/local/sun-java
+fi
+
+IPVIEWER=3.0.0.25
+export IPVIEWER
+IPVIEWER_PATH=${HOME}/usr/local/opt/hpip
+export IPVIEWER_PATH
+

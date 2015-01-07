@@ -1,0 +1,34 @@
+#/bin/bash
+pidexists=no
+
+SA=`ssh-add -L 2>&1`
+if [ "$SA" = "Could not open a connection to your authentication agent." ];then
+	source ~/usr/local/var/ssh
+	echo find.ssh sourced ~/usr/local/var/ssh to find  $SSH_AGENT_PID and $SSH_AUTH_SOCK
+	for x in `pidof ssh-agent`;do
+		echo is $x = "$SSH_AGENT_PID"?
+		if [ "$x" = "$SSH_AGENT_PID" ];then
+			pidexists=yes
+			echo yes
+		else
+			echo no
+		fi
+	done
+	if [ "$pidexists" = "no" ];then
+		ssh-agent | grep -v ^echo > "$HOME"/usr/local/var/ssh
+		source "$HOME"/usr/local/var/ssh
+		export SSH_AGENT_PID
+		export SSH_AUTH_SOCK
+		echo find.ssh found a stale pid and started ssh-agent
+	fi
+fi
+
+SA=`ssh-add -L 2>&1`
+if [ "$SA" = "Could not open a connection to your authentication agent." ];then
+	ssh-agent | grep -v ^echo > "$HOME"/usr/local/var/ssh
+	source "$HOME"/usr/local/var/ssh
+	export SSH_AGENT_PID
+	export SSH_AUTH_SOCK
+	echo find.ssh restarted ssh-agent
+fi
+echo find.ssh leaving with $SSH_AGENT_PID and $SSH_AUTH_SOCK

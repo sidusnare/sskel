@@ -11,7 +11,7 @@ Reason for the madness
 ==
 The goals here are:
 1) Not to have a cluttered $HOME folder
-2) Not modify or add to the system path
+2) Not modify or add to the system-wide path, to maintain your own setup in a shared enviroment and to maintain portability.
 3) Have things arranged so that having your common custom scripts in a git repository
 4) Workstation and platform agnosticism.
 
